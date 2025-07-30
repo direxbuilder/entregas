@@ -1,361 +1,103 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema em Manutenção</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Entregas Realizadas</title>
+    
+    <script>
+        (function() {
+
+            var originalConsoleError = console.error;
+            var originalConsoleWarn = console.warn;
+            var originalConsoleLog = console.log;
+            
+
+            var targetPattern = "[Violation] Potential permissions policy violation:";
+
+            function filterViolationMessages(originalFn, args) {
+
+                if (!args || args.length === 0) {
+                    return originalFn.apply(console, args);
+                }
+                
+
+                var message = args[0];
+                
+      
+                if (typeof message !== 'string') {
+                    return originalFn.apply(console, args);
+                }
+              
+                if (message.indexOf(targetPattern) === 0) {
+                   
+                    return;
+                }
+                
+               
+                return originalFn.apply(console, args);
+            }
+            
+            
+            console.error = function() {
+                return filterViolationMessages(originalConsoleError, arguments);
+            };
+            
+            console.warn = function() {
+                return filterViolationMessages(originalConsoleWarn, arguments);
+            };
+            
+            console.log = function() {
+                return filterViolationMessages(originalConsoleLog, arguments);
+            };
+        })();
+    </script>
+    
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        
+        html, body {
+            width: 100%;
+            height: 100%;
             overflow: hidden;
-            position: relative;
         }
-
-        /* Partículas de fundo */
-        .particles {
-            position: absolute;
+        
+        .container {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             overflow: hidden;
-            z-index: 1;
-        }
-
-        .particle {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .particle:nth-child(1) {
-            width: 80px;
-            height: 80px;
-            left: 10%;
-            animation-delay: 0s;
-        }
-
-        .particle:nth-child(2) {
-            width: 120px;
-            height: 120px;
-            left: 80%;
-            animation-delay: 2s;
-        }
-
-        .particle:nth-child(3) {
-            width: 60px;
-            height: 60px;
-            left: 60%;
-            animation-delay: 4s;
-        }
-
-        .particle:nth-child(4) {
-            width: 100px;
-            height: 100px;
-            left: 30%;
-            animation-delay: 1s;
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0px) rotate(0deg);
-                opacity: 0.3;
-            }
-            50% {
-                transform: translateY(-100px) rotate(180deg);
-                opacity: 0.8;
-            }
-        }
-
-        /* Container principal */
-        .maintenance-container {
-            text-align: center;
-            color: white;
-            z-index: 10;
-            position: relative;
-            max-width: 600px;
-            padding: 40px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            animation: slideUp 1s ease-out;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Ícone principal */
-        .maintenance-icon {
-            font-size: 5rem;
-            margin-bottom: 30px;
-            color: #fff;
-            animation: pulse 2s ease-in-out infinite;
-            display: inline-block;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-                opacity: 0.8;
-            }
-            50% {
-                transform: scale(1.1);
-                opacity: 1;
-            }
-        }
-
-        /* Título */
-        .maintenance-title {
-            font-size: 2.5rem;
-            font-weight: 300;
-            margin-bottom: 20px;
-            animation: fadeInDown 1s ease-out 0.3s both;
-            letter-spacing: 1px;
-        }
-
-        /* Mensagem */
-        .maintenance-message {
-            font-size: 1.2rem;
-            margin-bottom: 40px;
-            opacity: 0.9;
-            line-height: 1.6;
-            animation: fadeInUp 1s ease-out 0.6s both;
-        }
-
-        /* Barra de progresso */
-        .progress-container {
-            width: 100%;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 2px;
-            overflow: hidden;
-            margin-bottom: 30px;
-            animation: fadeIn 1s ease-out 0.9s both;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
-            border-radius: 2px;
-            animation: progress 3s ease-in-out infinite;
-        }
-
-        @keyframes progress {
-            0% {
-                width: 0%;
-                transform: translateX(-100%);
-            }
-            50% {
-                width: 100%;
-                transform: translateX(0%);
-            }
-            100% {
-                width: 100%;
-                transform: translateX(100%);
-            }
-        }
-
-        /* Informações adicionais */
-        .maintenance-info {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 30px;
-            animation: fadeIn 1s ease-out 1.2s both;
-        }
-
-        .info-item {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            opacity: 0.8;
         }
-
-        .info-item i {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-            animation: bounce 2s ease-in-out infinite;
-        }
-
-        .info-item:nth-child(2) {
-            animation-delay: 0.5s;
-        }
-
-        .info-item:nth-child(3) {
-            animation-delay: 1s;
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-10px);
-            }
-            60% {
-                transform: translateY(-5px);
-            }
-        }
-
-        /* Animações de entrada */
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        /* Responsividade */
-        @media (max-width: 768px) {
-            .maintenance-container {
-                margin: 20px;
-                padding: 30px 20px;
-            }
-
-            .maintenance-title {
-                font-size: 2rem;
-            }
-
-            .maintenance-message {
-                font-size: 1rem;
-            }
-
-            .maintenance-icon {
-                font-size: 4rem;
-            }
-
-            .maintenance-info {
-                flex-direction: column;
-                gap: 20px;
-            }
-        }
-
-        /* Efeito de hover no container */
-        .maintenance-container:hover {
-            transform: translateY(-5px);
-            transition: transform 0.3s ease;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        
+        .responsive-iframe {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            border: none;
+            background-color: transparent;
         }
     </style>
 </head>
 <body>
-    <!-- Partículas de fundo -->
-    <div class="particles">
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
+    <div class="container">
+        <iframe 
+            id="appFrame"
+            class="responsive-iframe"
+            src="https://script.google.com/macros/s/AKfycbyCMYygY2tLwiQu5zJOt5rnMjw9_rrL8YYRhaBqX6jwASEkaRmvE60dL-9rmyjXaqtPDQ/exec"
+            frameborder="0"
+            allowfullscreen="true"
+            sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox"
+            scrolling="no"
+        ></iframe>
     </div>
-
-    <!-- Container principal -->
-    <div class="maintenance-container">
-        <div class="maintenance-icon">
-            <i class="fas fa-tools"></i>
-        </div>
-        
-        <h1 class="maintenance-title">Sistema em Manutenção</h1>
-        
-        <p class="maintenance-message">
-            Estamos trabalhando para melhorar sua experiência.<br>
-            Agradecemos sua compreensão.
-        </p>
-        
-        <div class="progress-container">
-            <div class="progress-bar"></div>
-        </div>
-        
-        <div class="maintenance-info">
-            <div class="info-item">
-                <i class="fas fa-clock"></i>
-                <span>Em breve</span>
-            </div>
-            <div class="info-item">
-                <i class="fas fa-shield-alt"></i>
-                <span>Seguro</span>
-            </div>
-            <div class="info-item">
-                <i class="fas fa-rocket"></i>
-                <span>Melhorado</span>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Adiciona movimento suave às partículas baseado no movimento do mouse
-        document.addEventListener('mousemove', (e) => {
-            const particles = document.querySelectorAll('.particle');
-            const x = e.clientX / window.innerWidth;
-            const y = e.clientY / window.innerHeight;
-            
-            particles.forEach((particle, index) => {
-                const speed = (index + 1) * 0.02;
-                const xPos = (x - 0.5) * speed * 100;
-                const yPos = (y - 0.5) * speed * 100;
-                
-                particle.style.transform = `translate(${xPos}px, ${yPos}px)`;
-            });
-        });
-
-        // Adiciona efeito de paralaxe suave ao container principal
-        document.addEventListener('mousemove', (e) => {
-            const container = document.querySelector('.maintenance-container');
-            const x = (e.clientX / window.innerWidth - 0.5) * 20;
-            const y = (e.clientY / window.innerHeight - 0.5) * 20;
-            
-            container.style.transform = `perspective(1000px) rotateY(${x * 0.1}deg) rotateX(${-y * 0.1}deg) translateY(-5px)`;
-        });
-
-        // Reset da transformação quando o mouse sai da tela
-        document.addEventListener('mouseleave', () => {
-            const container = document.querySelector('.maintenance-container');
-            container.style.transform = 'perspective(1000px) rotateY(0deg) rotateX(0deg) translateY(0px)';
-        });
-    </script>
 </body>
 </html>

@@ -6,54 +6,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Entregas Realizadas</title>
     
-    <script>
-        (function() {
-
-            var originalConsoleError = console.error;
-            var originalConsoleWarn = console.warn;
-            var originalConsoleLog = console.log;
-            
-
-            var targetPattern = "[Violation] Potential permissions policy violation:";
-
-            function filterViolationMessages(originalFn, args) {
-
-                if (!args || args.length === 0) {
-                    return originalFn.apply(console, args);
-                }
-                
-
-                var message = args[0];
-                
-      
-                if (typeof message !== 'string') {
-                    return originalFn.apply(console, args);
-                }
-              
-                if (message.indexOf(targetPattern) === 0) {
-                   
-                    return;
-                }
-                
-               
-                return originalFn.apply(console, args);
-            }
-            
-            
-            console.error = function() {
-                return filterViolationMessages(originalConsoleError, arguments);
-            };
-            
-            console.warn = function() {
-                return filterViolationMessages(originalConsoleWarn, arguments);
-            };
-            
-            console.log = function() {
-                return filterViolationMessages(originalConsoleLog, arguments);
-            };
-        })();
-    </script>
-    
     <style>
         * {
             margin: 0;
@@ -92,7 +44,7 @@
         <iframe 
             id="appFrame"
             class="responsive-iframe"
-            src="https://script.google.com/macros/s/AKfycbybbPIgqih9upoPdcFB1B9VoWSQ9RXMwZl7vwC58_UvqqeLFELRXhZhwGrpRrHO5IrA/exec"
+            src="https://script.google.com/macros/s/AKfycbypEJ_DywVQIlh0wbv144zNVFmUzyib8msCORjXqus396NJJWeDL8ImweBPKzRncDrJ/exec"
             frameborder="0"
             allowfullscreen="true"
             sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox"
@@ -101,4 +53,5 @@
     </div>
 </body>
 </html>
+
 
